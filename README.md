@@ -1,2 +1,29 @@
-# devops-learning
-Free practical roadmap for learning DevOps from scratch: notes, labs, projects and hands-on exercises
+# DevOps Learning
+
+Бесплатная практическая программа обучения DevOps с нуля.
+
+Проект объединяет теорию, практические задания, лабораторные работы и учебные
+проекты, чтобы помочь изучать DevOps последовательно и на реальных примерах.
+
+---
+
+## 🚀 Как пользоваться ресурсом
+
+> В разработке.
+
+---
+
+## 🗺️ Roadmap
+
+- Основы компьютера
+- Linux
+- Git
+- Bash
+- SQL
+- Сети
+- Docker
+- Docker Compose
+- Nginx
+- CI/CD
+- Мониторинг
+- Kubernetes
