@@ -195,6 +195,20 @@ Grafana используется для:
 
 Это позволяет быстро обнаружить проблему и определить момент её возникновения.
 
+### Нагрузочное тестирование
+
+Чтобы проверить дашборд, можно создать контролируемую нагрузку на CPU, память и
+диск:
+
+```bash
+stress -c 2 -i 1 -m 1 --vm-bytes 32M -t 10s
+```
+
+Во время выполнения команды в Grafana должны изменяться показатели загрузки
+процессора, доступной памяти и дисковых операций.
+
+![Grafana во время нагрузочного теста](img/Grafana_stress_test.png)
+
 ---
 
 # Связка инструментов
@@ -247,4 +261,71 @@ HTML-отчёт или статистика в терминале
 
 # Практическое применение
 
-> Этот раздел будет дополнен после выполнения практических заданий.
+Ниже — небольшая локальная лаборатория. Она не требует отдельной виртуальной
+машины: достаточно Docker и Docker Compose. Файлы лаборатории находятся в
+каталоге [`lab`](lab/).
+
+## Prometheus, Node Exporter и Grafana
+
+Перейдите в каталог лаборатории и запустите сервисы:
+
+```bash
+cd docs/bash/lab
+docker compose up -d
+```
+
+Откройте Prometheus: `http://localhost:9090`. На странице **Status → Targets**
+цель `node-exporter` должна иметь статус **UP**. Попробуйте выполнить запросы в
+поле Expression:
+
+```promql
+up
+node_memory_MemAvailable_bytes
+rate(node_cpu_seconds_total[1m])
+```
+
+Grafana доступна по адресу `http://localhost:3000`; начальные логин и пароль —
+`admin` / `admin`. Источник Prometheus и учебный дашборд **Local system**
+подключаются автоматически. На нём можно посмотреть CPU, доступную память и
+свободное место на диске.
+
+Чтобы увидеть изменение метрик, создайте короткую нагрузку в отдельном
+терминале:
+
+```bash
+docker run --rm --cpus=1 alpine sh -c 'yes > /dev/null'
+```
+
+Остановите контейнер сочетанием `Ctrl+C`, затем обновите дашборд Grafana. Для
+остановки всей лаборатории выполните `docker compose down` из каталога `lab`.
+
+> В Docker Desktop Node Exporter показывает метрики Linux-окружения Docker, а не
+> напрямую macOS или Windows. На Linux он показывает метрики хоста.
+
+## GoAccess на примере лога
+
+В [`lab/goaccess/access.log`](lab/goaccess/access.log) есть небольшой журнал
+Nginx в формате `combined`. Установите GoAccess и постройте HTML-отчёт:
+
+```bash
+# Ubuntu / Debian
+sudo apt install goaccess
+
+goaccess docs/bash/lab/goaccess/access.log \
+  --log-format=COMBINED \
+  -o /tmp/goaccess-report.html
+```
+
+Откройте `/tmp/goaccess-report.html` в браузере. В отчёте можно увидеть коды
+ответов, наиболее запрашиваемые URL, IP-адреса и браузеры. Чтобы
+поэкспериментировать, добавьте в копию лога несколько строк с кодами `404` или
+`500` и создайте отчёт ещё раз.
+
+## Что изучить дальше
+
+- Добавьте в [`prometheus.yml`](lab/prometheus.yml) ещё один `scrape_config` и
+  проверьте, что новая цель появилась в Prometheus.
+- В Grafana создайте свою панель с запросом
+  `rate(node_network_receive_bytes_total[1m])`.
+- Импортируйте популярный готовый дашборд Node Exporter по ID `1860` через
+  **Dashboards → New → Import** и сравните его с учебным дашбордом.

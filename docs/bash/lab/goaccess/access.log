@@ -1,0 +1,5 @@
+192.0.2.10 - - [27/Jul/2026:10:00:01 +0000] "GET / HTTP/1.1" 200 2048 "-" "Mozilla/5.0"
+198.51.100.22 - - [27/Jul/2026:10:00:13 +0000] "GET /products HTTP/1.1" 200 5321 "https://example.test/" "Mozilla/5.0"
+203.0.113.7 - - [27/Jul/2026:10:01:20 +0000] "GET /missing HTTP/1.1" 404 153 "-" "curl/8.0"
+192.0.2.10 - - [27/Jul/2026:10:02:44 +0000] "POST /api/orders HTTP/1.1" 201 321 "https://example.test/products" "Mozilla/5.0"
+198.51.100.22 - - [27/Jul/2026:10:03:10 +0000] "GET /api/status HTTP/1.1" 500 87 "-" "Mozilla/5.0"
