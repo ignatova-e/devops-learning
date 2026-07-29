@@ -1,0 +1,10 @@
+[Unit]
+Description=Run custom Prometheus metrics collector every 3 seconds
+
+[Timer]
+OnBootSec=3s
+OnUnitActiveSec=3s
+Unit=custom-node-metrics.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,6 @@
+[Unit]
+Description=Collect custom Prometheus system metrics
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/lib/custom-node-exporter/main.sh
